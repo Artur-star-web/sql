@@ -1,45 +1,46 @@
-Thumbs.db*
-.DS_Store
-HELP.md
-.gradle
+# Игнорировать все сгенерированные файлы и каталоги
+.gradle/
 build/
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
 out/
+target/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# Игнорировать wrapper файлы
+gradle/wrapper/
 
-### VS Code ###
+# Игнорировать IDE файлы
+.idea/
 .vscode/
 
-### Package Files ###
+# Игнорировать файлы настроек системы
+*.log
+*.bak
+*.tmp
+*.swp
+*~.nib
+*.sublime-workspace
+*.sublime-project
+
+# Игнорировать скомпилированные артефакты
+*.class
 *.jar
 *.war
-*.nar
-*.ear
 *.zip
+*.tar
 *.tar.gz
-*.rar
 
-### Exclusions ###
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**
-!**/src/test/**
+# Игнорировать системные файлы
+.DS_Store
+Thumbs.db
+
+# Оставить только нужные файлы
+!docker-compose.yml
+!app-deadline.jar
+!schema.sql
+
+# Игнорировать любые другие артефакты, кроме проекта с кодом тестов
+!gradlew
+!gradlew.bat
+!build.gradle
+!settings.gradle
+!src/
+!gradle/
