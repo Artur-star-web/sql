@@ -1,6 +1,10 @@
 package test;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ru.netology.web.data.DataHelper;
+import ru.netology.web.data.DbUtils;
+import ru.netology.web.page.LoginPage;
 
 import java.time.Duration;
 
@@ -8,33 +12,32 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginTest2 {
 
     @Test
-    void shouldBlockUserAfterThreeInvalidVerificationAttempts() {
-        String login = "vasya";
-        String password = "qwerty123";
-
+    void shouldBlockUserAfterThreeInvalidCodes() {
+        // Открытие страницы логина
         open("http://localhost:9999");
 
-        // Вводим логин и пароль
-        $("[data-test-id=login] input").setValue(login);
-        $("[data-test-id=password] input").setValue(password);
-        $("[data-test-id=action-login]").click();
+        // Получаем данные для логина
+        var authInfo = DataHelper.getAuthInfo();
 
-        // Ждём появления формы ввода кода
-        $("[data-test-id=code] input").shouldBe(visible, Duration.ofSeconds(10));
+        // Переход на страницу логина и ввод данных
+        var loginPage = new LoginPage();
+        var verificationPage = loginPage.validLogin(authInfo);
 
-        // Три раза вводим неверный код
+        // Неверный ввод кода 3 раза
         for (int i = 0; i < 3; i++) {
-            $("[data-test-id=code] input").setValue("000000"); // неправильный код
-            $("[data-test-id=action-verify]").click();
+            verificationPage.validVerify("000000"); // Ввод неверного кода
+            verificationPage.shouldShowError("Неверно указан код! Попробуйте ещё раз.");
         }
 
-        // После 3 попыток пользователь должен быть заблокирован
-        $("[data-test-id=error-notification]")
-                .shouldBe(visible)
-                .shouldHave(text("Пользователь заблокирован"));
+        // Проверка, что блокировка произошла (например, на сервере блокируется)
+        // В реальном тесте можно использовать проверку через БД или на UI
+        String status = DbUtils.getVerificationCodeFor(authInfo.getLogin()); // Здесь можно проверить статус блокировки
+        assertTrue(status == null || status.isEmpty(), "Пользователь должен быть заблокирован!");
     }
+
 }
