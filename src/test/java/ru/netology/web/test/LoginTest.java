@@ -1,14 +1,42 @@
-package test;
+package ru.netology.web.test;
 
+
+import com.codeborne.selenide.Configuration;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.netology.web.data.DataHelper;
 import ru.netology.web.data.DbUtils;
+import ru.netology.web.page.DashboardPage;
 import ru.netology.web.page.LoginPage;
 
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class LoginTest2 {
+
+public class LoginTest {
+    @BeforeAll
+    static void setup() {
+        Configuration.baseUrl = "http://localhost:9999";
+    }
+
+    @AfterAll
+    static void tearDown() {
+        DbUtils.cleanDatabase(); // Очистка базы после всех тестов
+    }
+
+    @Test
+    void shouldLoginSuccessfully() {
+        var authInfo = DataHelper.getAuthInfo();
+        var loginPage = new LoginPage();
+        var verificationPage = loginPage.validLogin(authInfo);
+        var code = DataHelper.getVerificationCodeFor(authInfo.getLogin());
+        verificationPage.validVerify(code);
+
+        new DashboardPage();
+    }
 
     @Test
     void shouldBlockUserAfterThreeInvalidCodes() {
@@ -24,7 +52,7 @@ public class LoginTest2 {
 
         // Неверный ввод кода 3 раза
         for (int i = 0; i < 3; i++) {
-            verificationPage.validVerify("000000"); // Ввод неверного кода
+            verificationPage.validVerify(DataHelper.getInvalidVerificationCode());
             verificationPage.shouldShowError("Неверно указан код! Попробуйте ещё раз.");
         }
 
@@ -32,5 +60,4 @@ public class LoginTest2 {
         String status = DbUtils.getVerificationCodeFor(authInfo.getLogin()); // Здесь можно проверить статус блокировки
         assertTrue(status == null || status.isEmpty(), "Пользователь должен быть заблокирован!");
     }
-
 }

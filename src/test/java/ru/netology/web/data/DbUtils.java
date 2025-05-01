@@ -28,4 +28,14 @@ public class DbUtils {
             throw new RuntimeException("Не удалось получить код для пользователя: " + login, e);
         }
     }
+
+    public static void cleanDatabase() {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            runner.update(conn, "DELETE FROM auth_codes");
+            runner.update(conn, "DELETE FROM cards");
+            runner.update(conn, "DELETE FROM users"); // Самое последнее
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при очистке базы данных", e);
+        }
+    }
 }
