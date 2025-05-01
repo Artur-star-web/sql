@@ -11,7 +11,6 @@ public class LoginPage {
         open("http://localhost:9999");
     }
 
-    // Элементы страницы
     private final SelenideElement loginField = $("[data-test-id=login] input");
     private final SelenideElement passwordField = $("[data-test-id=password] input");
     private final SelenideElement loginButton = $("[data-test-id=action-login]");

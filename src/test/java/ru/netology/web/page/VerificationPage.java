@@ -6,7 +6,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 
 public class VerificationPage {
-    // Элементы страницы
+
     private final SelenideElement codeField = $("[data-test-id=code] input");
     private final SelenideElement verifyButton = $("[data-test-id=action-verify]");
 

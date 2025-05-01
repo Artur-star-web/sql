@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DbUtils {
-    // Константы подключения к базе данных
+
     private static final QueryRunner runner = new QueryRunner();
     private static final String DB_URL = "jdbc:mysql://localhost:3306/app";
     private static final String DB_USER = "app";
